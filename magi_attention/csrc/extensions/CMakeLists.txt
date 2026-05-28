@@ -7,6 +7,13 @@ if(NOT DEFINED MAGI_CUDA_ARCHITECTURES OR MAGI_CUDA_ARCHITECTURES STREQUAL "")
 endif()
 message(STATUS "[magi_attn_ext] MAGI_CUDA_ARCHITECTURES: '${MAGI_CUDA_ARCHITECTURES}'")
 
+# CMake 3.18+ requires CMAKE_CUDA_ARCHITECTURES to be set before
+# project(... CUDA). PyTorch's find_package(Torch) later overrides this
+# back to OFF and injects its own -gencode flags, so the value here only
+# needs to satisfy CMake's pre-project validation. Mirror MAGI_CUDA_ARCHITECTURES
+# so users don't have to set two variables.
+set(CMAKE_CUDA_ARCHITECTURES "${MAGI_CUDA_ARCHITECTURES}")
+
 project(magi_attn_ext LANGUAGES CXX CUDA)
 
 # ==============================================================================
