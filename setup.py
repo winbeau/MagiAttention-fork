@@ -337,6 +337,14 @@ def build_magi_attn_ext_module(
     # to keep the source tree clean.
     magi_attn_ext_dir_abs = csrc_dir / "extensions"
     build_dir = magi_attn_ext_dir_abs / "build"
+    # Always rebuild from scratch: CMakeCache.txt pins absolute paths to the
+    # torch installation in the build env. Under PEP 517 build isolation
+    # (e.g. `pip install`, `uv sync`) that path lives in a temp dir that
+    # gets deleted between invocations, so reusing a cached build fails with
+    # `No rule to make target '<tmp>/torch/lib/libc10.so'`.
+    if build_dir.exists():
+        import shutil
+        shutil.rmtree(build_dir)
     build_dir.mkdir(parents=True, exist_ok=True)
 
     print(f"{title_left_str}Building magi_attn_ext with CMake{title_right_str}")
