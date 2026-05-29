@@ -1084,6 +1084,7 @@ def flex_flash_attn_func(
     disable_bwd_dkv_atomic_reduction: bool = False,
     ref_block_size: tuple[int, int] | None = None,
     max_seqlen_q: int | None = None,
+    max_seqlen_k: int | None = None,  # accepted for API compat with MAGI-1 dit_module; ignored
     auto_range_merge: bool = False,
     swap_ab: bool = False,
     pack_gqa: bool = False,
